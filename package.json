@@ -1,0 +1,13 @@
+{
+  "name": "mir-egal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mir Egal - 2D Multiplayer Minigames fuer Team L und Team S",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
