@@ -15,13 +15,13 @@ const ACCESSORY_LABELS={none:'Ohne',bow:'Schleife',crown:'Krone',glasses:'Brille
 const accessoryIcons={none:'×',bow:'🎀',crown:'♛',glasses:'◎',scarf:'〰'};
 function appearancePicker(){
  return `<div class="appearance-picker">
-  <div class="character-spotlight" id="character-preview">${ownAvatar()}<div><strong>Deine Tiergruppe</strong></div></div>
+  <div class="character-spotlight" id="character-preview">${ownAvatar()}<div><strong>Dein Avatar</strong></div></div>
   <div class="appearance-label">Farbe</div><div class="swatch-row">${Object.entries(StarAvatar.COLORS).map(([id,color])=>`<button type="button" title="${COLOR_LABELS[id]}" aria-label="${COLOR_LABELS[id]}" aria-pressed="${getColor()===id}" class="swatch ${getColor()===id?'chosen':''}" style="--swatch:${color}" data-action="color" data-color="${id}"></button>`).join('')}</div>
   <div class="appearance-label">Zubehör</div><div class="accessory-row">${Object.keys(ACCESSORY_LABELS).map(id=>`<button class="accessory-button ${getAccessory()===id?'chosen':''}" type="button" data-action="accessory" data-accessory="${id}" title="${ACCESSORY_LABELS[id]}" aria-pressed="${getAccessory()===id}">${accessoryIcons[id]}</button>`).join('')}</div>
  </div>`;
 }
 function refreshAppearance(){
- const preview=document.getElementById('character-preview');if(preview)preview.innerHTML=`${ownAvatar()}<div><strong>Deine Tiergruppe</strong></div>`;
+ const preview=document.getElementById('character-preview');if(preview)preview.innerHTML=`${ownAvatar()}<div><strong>Dein Avatar</strong></div>`;
  document.querySelectorAll('.swatch').forEach(el=>{let selected=el.dataset.color===getColor();el.classList.toggle('chosen',selected);el.setAttribute('aria-pressed',String(selected));});
  document.querySelectorAll('.accessory-button').forEach(el=>{let selected=el.dataset.accessory===getAccessory();el.classList.toggle('chosen',selected);el.setAttribute('aria-pressed',String(selected));});
 }
@@ -31,12 +31,12 @@ const starDecor=()=>'<div class="starfield" aria-hidden="true"><span>✦</span><
 
 const toastBox = document.getElementById('toast');
 const GAME_INFO = {
- tictactoe:{name:'Tic-Tac-Toe',icon:'❌⭕',short:'3 in einer Reihe',hint:'Klicke auf ein freies Feld. Du hast 24 Sekunden pro Zug.'},
- connect4:{name:'4 Gewinnt',icon:'🔵🟡',short:'4 in einer Reihe',hint:'Klicke auf eine Spalte. Du hast 24 Sekunden pro Zug.'},
- snake:{name:'Schlangenkreuzung',icon:'🐍',short:'Alle gegen alle',hint:'Steuere mit WASD oder den Pfeiltasten. Sammle Futter und vermeide Kollisionen mit den Wänden oder anderen Spielern.'},
- mathquiz:{name:'Mathequiz',icon:'🧮',short:'Schnell rechnen',hint:'Löse Aufgaben schneller als dein Gegner. Richtige Antworten bringen Punkte, falsche ziehen welche ab.'},
- cellwars:{name:'Fresskampf',icon:'⚔️',short:'Masse sammeln, andere fressen',hint:'Steuere mit WASD oder den Pfeiltasten. Größere Zellen können kleinere Gegnerzellen verschlingen.'},
- wordle:{name:'Wordle Battle',icon:'🟩',short:'Wortduell',hint:'Errate das geheime Wort mit 5 Buchstaben vor deinem Gegner. Grün = richtig, Gelb = falsche Position, Grau = nicht enthalten.'}
+ tictactoe:{name:'Tic-Tac-Toe',icon:'',short:'Drei in einer Reihe',hint:'Drei in einer Reihe gewinnen. 24 Sekunden pro Zug.'},
+ connect4:{name:'4 Gewinnt',icon:'',short:'Vier in einer Reihe',hint:'Vier Steine in einer Reihe gewinnen. 24 Sekunden pro Zug.'},
+ snake:{name:'Schlangenkreuzung',icon:'',short:'Sammeln und überleben',hint:'Sammle Punkte und weiche anderen aus. WASD oder Pfeiltasten.'},
+ mathquiz:{name:'Mathequiz',icon:'',short:'Schnell rechnen',hint:'Richtig +10, falsch −5. Rechne schneller als dein Gegner.'},
+ cellwars:{name:'Fresskampf',icon:'',short:'Wachsen und fressen',hint:'Sammle Punkte und friss kleinere Zellen.'},
+ wordle:{name:'Wordle Battle',icon:'',short:'Fünf Buchstaben',hint:'Ein Wort, sechs Versuche. Wer zuerst richtig liegt, gewinnt.'}
 };
 
 let socket=null, myId=null, room=null, screenKey='', chosenDuel=null, serverOffset=0, inputTimer=0, toastTimer=0;
@@ -193,12 +193,12 @@ function handleStateEffects(old,now){
  }
 }
 const gameDescriptions={
- tictactoe:'Setze abwechselnd dein Symbol auf das 3×3-Spielfeld. Drei in einer Reihe gewinnen. Du hast 24 Sekunden pro Zug.',
- connect4:'Wirf deine Steine in eine Spalte. Vier gleiche Steine waagerecht, senkrecht oder diagonal gewinnen.',
- snake:'Schlängle dich frei durch den Sternenstaub. Sammle Lichtpunkte, wachse und schneide anderen den Weg ab. WASD / Pfeiltasten zum Lenken.',
- mathquiz:'Rechne schneller als dein Gegner! Tippe das Ergebnis ein und bestätige mit Enter. Jede richtige Antwort bringt Punkte.',
- cellwars:'Sammle Sterne, wachse und verschlinge kleinere Gegner. Powerups können dir gut weiterhelfen.',
- wordle:'Zwei Spieler, ein geheimes Wort! Beide sehen die Versuche des anderen live. Wer das Wort zuerst errät, gewinnt 100 Punkte. Ihr habt maximal 90 Sekunden.'
+ tictactoe:'Drei in einer Reihe gewinnen. 24 Sekunden pro Zug.',
+ connect4:'Vier Steine in einer Reihe gewinnen. 24 Sekunden pro Zug.',
+ snake:'Sammle Lichtpunkte. Weiche Wänden und anderen Schlangen aus.',
+ mathquiz:'Rechne schneller als dein Gegner. Richtig +10, falsch −5.',
+ cellwars:'Sammle Punkte und friss kleinere Zellen.',
+ wordle:'Finde das Wort vor deinem Gegner. Sechs Versuche, 90 Sekunden.'
 };
 
 const keys=new Set();let mouseDirection=null,lastInput='',lastInputAt=0,splitRequested=false;
@@ -210,6 +210,7 @@ const getPlayer=id=>room?.players.find(p=>p.id===id);
 const playerName=id=>getPlayer(id)?.name||(String(id).startsWith('roundbot-')?'Sternenbot':'Spieler');
 const me=()=>getPlayer(myId);
 const isHost=()=>room?.hostId===myId;
+const teamName=t=>t==='L'?'Lara':t==='S'?'Soul':'–';
 const getName=()=>document.getElementById('username')?.value.trim().slice(0,18)||nameFromStorage()||'Spieler';
 const say=(message)=>{toastBox.textContent=message;toastBox.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastBox.classList.remove('visible'),3300)};
 const send=(type,extra={})=>{if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify({type,...extra}));};
@@ -266,7 +267,7 @@ function connectAnd(type,payload){
    handleStateEffects(old,room);
   }
  });
- socket.addEventListener('error',()=>{loading=false;say('Server nicht erreichbar. Ist START_MIR_EGAL.bat gestartet?')});
+ socket.addEventListener('error',()=>{loading=false;say('Server nicht erreichbar. Versuch es gleich noch mal.')});
  socket.addEventListener('close',()=>{
   const wasInRoom=!!room;
   loading=false;room=null;myId=null;screenKey='';chosenDuel=null;keys.clear();
@@ -275,8 +276,8 @@ function connectAnd(type,payload){
  });
 }
 
-const header=()=>starDecor()+`<header class="topbar"><div class="brand"><div class="logo">✦</div><div>MIR <em>EGAL.</em><small class="server-subtitle">✧ STERNENSTAUB ✧</small></div></div>
- <div class="topright"><button class="audio-toggle" type="button" data-action="sound" aria-label="Soundeffekte an oder aus" title="Sound an/aus">${StarSound.enabled?'🔊 Ton AN':'🔇 Ton AUS'}</button><button class="audio-toggle" type="button" data-action="music" aria-label="Hintergrundmusik an oder aus" title="Musik an/aus">${StarSound.musicOn?'♫ Musik AN':'♫ Musik AUS'}</button>${room?`<span class="pill">LOBBY <span class="room-code" style="font-size:12px;letter-spacing:1px">${esc(room.code)}</span></span>`:''}<span class="online"><span class="dot"></span> Multiplayer online</span>${room?`<button class="icon-btn" data-action="leave">✕ Verlassen</button>`:''}</div></header>`;
+const header=()=>starDecor()+`<header class="topbar"><div class="brand"><div class="logo">M</div><div>MIR <em>EGAL.</em><small class="server-subtitle">STERNENSTAUB</small></div></div>
+ <div class="topright"><button class="audio-toggle" type="button" data-action="sound" aria-label="Soundeffekte an oder aus" title="Sound an/aus">${StarSound.enabled?'Ton an':'Ton aus'}</button><button class="audio-toggle" type="button" data-action="music" aria-label="Hintergrundmusik an oder aus" title="Musik an/aus">${StarSound.musicOn?'Musik an':'Musik aus'}</button>${room?`<span class="pill">LOBBY <span class="room-code" style="font-size:12px;letter-spacing:1px">${esc(room.code)}</span></span>`:''}<span class="online"><span class="dot"></span>Online</span>${room?`<button class="icon-btn" data-action="leave">Verlassen</button>`:''}</div></header>`;
 
 function renderHome(){
  app.innerHTML=header()+`
@@ -284,25 +285,24 @@ function renderHome(){
 
   <section class="home-intro">
    <h1 class="title">
-    <span class="gradient-text">MIR EGAL<br>Das offizielle Discord Sternenstaub Spiel</span>
+    MIR <span class="gradient-text">EGAL.</span><span class="title-kicker">STERNENSTAUB</span>
    </h1>
-   <p class="sub">Der Große Kampf zwischen Team Lara und Team Soul 🌠</p>
+   <p class="sub">Lara gegen Soul. Sechs Spiele, ein Sieger.</p>
    <div class="features">
     <span class="feature">Multiplayer</span>
     <span class="feature">Bis zu 20 Spieler</span>
-    <span class="feature">Entwickler: FelixFries</span>
+    
    </div>
   </section>
 
   <div class="home-content">
 
    <section class="home-box home-avatar">
-    <div class="eyebrow">DEIN STERNENWESEN</div>
-    <h3>Avatareditor</h3>
+    <div class="eyebrow">PROFIL</div>
+    <h3>Dein Avatar</h3>
 
     <label class="form-label pet-label">
-     DEIN STERNENWESEN
-     <span class="pet-hint">(lokal auf deinem Gerät)</span>
+     Tier wählen
     </label>
 
     <div class="pet-picker">
@@ -322,60 +322,60 @@ function renderHome(){
     ${appearancePicker()}
    </section>
    <section class="home-games">
-    <div class="eyebrow">✦ STERNENSTAUB</div>
+    <div class="eyebrow">SPIELE</div>
     <h2>Minispiele</h2>
 
     <div class="preview-grid">
      <div class="preview-tile">
-      <div><h4>Tic-Tac-Toe</h4><p>Kopf an Kopf</p></div>
+      <div><h4>Tic-Tac-Toe</h4><p>Drei in einer Reihe</p></div>
       <div class="preview-visual">✕○✕</div>
      </div>
 
      <div class="preview-tile">
-      <div><h4>4 Gewinnt</h4><p>Strategie gewinnt</p></div>
+      <div><h4>4 Gewinnt</h4><p>Vier in einer Reihe</p></div>
       <div class="preview-visual pink">●●●●</div>
      </div>
 
      <div class="preview-tile">
-      <div><h4>Slither Stars</h4><p>Überlebe die Arena</p></div>
+      <div><h4>Schlangenkreuzung</h4><p>Sammeln und überleben</p></div>
       <div class="preview-visual green">▦ ▰</div>
      </div>
 
      <div class="preview-tile">
-      <div><h4>Agar Arena</h4><p>Werde zur größten Zelle</p></div>
+      <div><h4>Fresskampf</h4><p>Wachsen und fressen</p></div>
       <div class="preview-visual yellow">◉ ◉</div>
      </div>
 
      <div class="preview-tile">
-      <div><h4>Mathquiz</h4><p>Wer rechnet schneller?</p></div>
+      <div><h4>Mathequiz</h4><p>Rechne schneller</p></div>
       <div class="preview-visual">7 × 8 = ?</div>
      </div>
 
      <div class="preview-tile">
-      <div><h4>Wordle Battle</h4><p>Errate das Wort zuerst!</p></div>
+      <div><h4>Wordle Battle</h4><p>Fünf Buchstaben</p></div>
       <div class="preview-visual green">🟩🟨⬜</div>
      </div>
     </div>
    </section>
 
    <section class="home-box home-lobby">
-    <div class="eyebrow">LOS GEHT'S</div>
-    <h3 style="margin-top:10px">Bereit für ein Match?</h3>
+    <div class="eyebrow">MULTIPLAYER</div>
+    <h3 style="margin-top:10px">Lobby starten</h3>
 
-    <label for="username" class="form-label">DEIN SPIELERNAME</label>
+    <label for="username" class="form-label">Spielername</label>
     <input id="username" class="field" maxlength="18"
      autocomplete="nickname" placeholder="Wie heißt du?"
      value="${esc(nameFromStorage())}">
 
     <button class="btn btn-primary btn-full"
      style="margin-top:17px" data-action="create">
-     ✦ Neue Lobby erstellen
+     Lobby erstellen
     </button>
 
-    <div class="separator">ODER EINER LOBBY BEITRETEN</div>
+    <div class="separator">ODER BEITRETEN</div>
 
     <label for="joincode" class="form-label" style="margin-top:0">
-     LOBBY-CODE
+     Lobby-Code
     </label>
 
     <div class="join-row">
@@ -383,26 +383,25 @@ function renderHome(){
       maxlength="6" placeholder="ABC123"
       value="${esc(storedCode)}">
      <button class="btn btn-secondary" data-action="join">
-      Beitreten →
+      Beitreten
      </button>
     </div>
 
     <div class="notice" style="margin-top:19px">
-     💡 Freunde können mit dem Lobby-Code oder einem Einladungslink
-     beitreten. Der Host muss den Spielserver erreichbar machen.
+     Teile den Lobby-Code mit deinen Freunden.
     </div>
    </section>
 
   </div>
  </main>
- <div class="footer">🌠 STERNENSTAUB 🌠 · MIR EGAL</div>`;
+ <div class="footer">STERNENSTAUB · von FelixFries</div>`;
 }
 
 function teamCard(team){
  const members=room.players.filter(p=>p.team===team);
  const joined=me()?.team===team;
  return `<section class="panel team-panel"><div class="team-header ${team}"><div class="team-badge"><span class="team-avatar ${team}">${team}</span><span>TEAM ${team}</span></div><span class="pill ${team.toLowerCase()}">${members.length} / 10</span></div>
-  <div class="playerlist">${members.length?members.map(p=>`<div class="player"><span class="avatar pet-avatar">${avatarHTML(p.id)}</span><span class="name">${esc(p.name)} ${p.id===room.hostId?'♛':''}</span>${p.id===myId?'<span class="you">DU</span>':''}${p.bot?'<span class="bot-tag">🤖 BOT</span>':''}${p.bot&&isHost()?`<button class="bot-remove" data-action="removebot" data-id="${p.id}" title="Bot entfernen">✕</button>`:''}<span title="Bereit" style="color:${p.ready?'#66ddae':'#77798f'}">${p.ready?'✓':'○'}</span></div>`).join(''):'<div class="player-empty">Noch niemand in diesem Team.<br>Sei der Erste!</div>'}</div>
+  <div class="playerlist">${members.length?members.map(p=>`<div class="player"><span class="avatar pet-avatar">${avatarHTML(p.id)}</span><span class="name">${esc(p.name)} ${p.id===room.hostId?'♛':''}</span>${p.id===myId?'<span class="you">DU</span>':''}${p.bot?'<span class="bot-tag">🤖 BOT</span>':''}${p.bot&&isHost()?`<button class="bot-remove" data-action="removebot" data-id="${p.id}" title="Bot entfernen">✕</button>`:''}<span title="Bereit" style="color:${p.ready?'#66ddae':'#77798f'}">${p.ready?'✓':'○'}</span></div>`).join(''):'<div class="player-empty">Noch frei.</div>'}</div>
   <div class="team-action">${isHost()?`<button class="bot-add" data-action="addbot" data-team="${team}" ${members.length>=10||room.players.length>=20?'disabled':''}>＋ 🤖 Bot zu Team ${team}</button>`:''}<button class="join-team ${team==='S'?'S':''} ${joined?'active':''}" data-action="team" data-team="${team}" ${joined||members.length>=10?'disabled':''}>${joined?'✓ Du bist in Team '+team:members.length>=10?'Team voll':'Team '+team+' beitreten →'}</button></div></section>`;
 }
 
@@ -410,18 +409,18 @@ function renderLobby(){
  const lCount=room.players.filter(p=>p.team==='L').length,sCount=room.players.filter(p=>p.team==='S').length;
  const canPlay=lCount>0&&sCount>0&&Math.abs(lCount-sCount)<=1;
  const hostView=isHost();
- app.innerHTML=header()+`<main><div class="section-head"><div><div class="eyebrow">WARTERAUM · ${room.players.length}/20 SPIELER</div><h1>Deine Lobby <span class="gradient-text">${esc(room.code)}</span></h1><div class="small">${hostView?'Du bist der Host.':'Warte auf den Host.'} Wähle ein Team und mach dich bereit.</div></div>
-  <div style="display:flex;gap:9px;flex-wrap:wrap"><button class="btn btn-secondary btn-small" data-action="copycode">⧉ Code kopieren</button><button class="btn btn-secondary btn-small" data-action="copylink">↗ Einladungslink</button></div></div>
-  <div class="lobby-profile"><span class="profile-sticker">${ownAvatar()}</span><div><strong>Dein Sternenwesen</strong><span class="small">${me()?.name?esc(me().name):'Zuschauer'} · Charakterfarbe und Accessoire kannst du im Startmenü ändern.</span></div></div>
+ app.innerHTML=header()+`<main><div class="section-head"><div><div class="eyebrow">LOBBY · ${room.players.length}/20</div><h1>Lobby <span class="gradient-text">${esc(room.code)}</span></h1><div class="small">${hostView?'Du bist der Host.':'Warte auf den Host.'} Wähle ein Team.</div></div>
+  <div style="display:flex;gap:9px;flex-wrap:wrap"><button class="btn btn-secondary btn-small" data-action="copycode">Code kopieren</button><button class="btn btn-secondary btn-small" data-action="copylink">Einladungslink</button></div></div>
+  <div class="lobby-profile"><span class="profile-sticker">${ownAvatar()}</span><div><strong>Dein Avatar</strong><span class="small">${me()?.name?esc(me().name):'Zuschauer'} · Bearbeiten im Startmenü.</span></div></div>
   <div class="lobby-grid">${teamCard('L')}${teamCard('S')}</div>
-  <div class="lobby-bottom"><section class="panel"><div class="panel-title"><h3>🎮 Minigame-Auswahl</h3><span class="small">${hostView?'Host-Einstellungen':'Vom Host festgelegt'}</span></div>
+  <div class="lobby-bottom"><section class="panel"><div class="panel-title"><h3>Spiele auswählen</h3><span class="small">${hostView?'Host-Einstellungen':'Vom Host festgelegt'}</span></div>
    <div class="settings-games">${Object.entries(GAME_INFO).map(([key,g])=>`<label class="game-check"><input class="mode-checkbox" type="checkbox" value="${key}" ${room.options.games.includes(key)?'checked':''} ${hostView?'':'disabled'}><span>${esc(g.name)}</span></label>`).join('')}</div>
-   <div class="settings-line"><span>Runden pro Match</span><select id="rounds" ${hostView?'':'disabled'}>${[1,3,5,7,9].map(n=>`<option value="${n}" ${room.options.rounds===n?'selected':''}>${n} Runde${n>1?'n':''}</option>`).join('')}</select></div>
+   <div class="settings-line"><span>Runden</span><select id="rounds" ${hostView?'':'disabled'}>${[1,3,5,7,9].map(n=>`<option value="${n}" ${room.options.rounds===n?'selected':''}>${n} Runde${n>1?'n':''}</option>`).join('')}</select></div>
    <div class="small" style="margin-top:14px">1-gegen-1-Duelle werden parallel ausgelost. Bei Snake und Cell Wars spielt die ganze Lobby gleichzeitig.</div></section>
-   <section class="panel lobby-actions"><div class="panel-title"><h3>🚀 Match starten</h3><span class="pill">${room.options.rounds} Runden</span></div>
-    <div class="notice">Mindestens <strong>1 Spieler pro Team</strong>, höchstens <strong>1 Spieler Unterschied</strong>. Maximal 10 je Team. Nicht zugeteilte Spieler können zuschauen.</div>
-    <button class="btn btn-secondary btn-full" data-action="ready" ${me()?.team?'':'disabled'}>${me()?.ready?'✓ Bereit – zurücknehmen':'○ Als bereit markieren'}</button>
-    ${hostView?`<button class="btn btn-primary btn-full" data-action="start" ${canPlay?'':'disabled'}>⚡ MATCH STARTEN</button><span class="small" style="text-align:center">${canPlay?'Alles bereit! Du kannst starten.':'Beide Teams benötigen Spieler und dürfen sich maximal um 1 unterscheiden.'}</span>`:`<div class="notice green" style="text-align:center">⏳ Der Host startet das Match.</div>`}
+   <section class="panel lobby-actions"><div class="panel-title"><h3>Match</h3><span class="pill">${room.options.rounds} Runden</span></div>
+    <div class="notice">Mindestens 1 Spieler pro Team. Maximal 1 Spieler Unterschied.</div>
+    <button class="btn btn-secondary btn-full" data-action="ready" ${me()?.team?'':'disabled'}>${me()?.ready?'Bereit zurücknehmen':'Bereit melden'}</button>
+    ${hostView?`<button class="btn btn-primary btn-full" data-action="start" ${canPlay?'':'disabled'}>Match starten</button><span class="small" style="text-align:center">${canPlay?'Alles bereit! Du kannst starten.':'Beide Teams benötigen Spieler und dürfen sich maximal um 1 unterscheiden.'}</span>`:`<div class="notice green" style="text-align:center">Warte auf den Start.</div>`}
    </section></div></main>`;
 }
 
@@ -434,7 +433,7 @@ function updateScoreHeader(){
 }
 
 function scoreBar(){
- return `<div class="scoreboard"><div class="score-side"><span class="team-avatar">L</span><div><div class="small">TEAM L</div><div class="score-value mark-L">${room.scores.L}</div></div></div><div class="score-mid"><span>RUNDE ${room.round} / ${room.rounds}</span><strong>VS</strong></div><div class="score-side right"><div style="text-align:right"><div class="small">TEAM S</div><div class="score-value mark-S">${room.scores.S}</div></div><span class="team-avatar S">S</span></div></div>`;
+ return `<div class="scoreboard"><div class="score-side"><span class="team-avatar">L</span><div><div class="small">LARA</div><div class="score-value mark-L">${room.scores.L}</div></div></div><div class="score-mid"><span>RUNDE ${room.round} / ${room.rounds}</span><strong>VS</strong></div><div class="score-side right"><div style="text-align:right"><div class="small">SOUL</div><div class="score-value mark-S">${room.scores.S}</div></div><span class="team-avatar S">S</span></div></div>`;
 }
 
 function chooseDuel(){
@@ -457,8 +456,8 @@ function renderDuelGame(){
  }
  let status='Du schaust diesem Duell zu.';
  if(duel){if(duel.finished)status=duel.winner==='draw'?'🤝 Unentschieden':`🏆 Team ${duel.winner} gewinnt dieses Duell!`;
-  else if(myTurn)status='✨ Du bist am Zug!';
-  else if(myDuel)status='⏳ Dein Gegner ist am Zug.';
+  else if(myTurn)status='Du bist dran.';
+  else if(myDuel)status='Gegner ist dran.';
   else status=`Team ${duel.turn} ist am Zug · Zuschauermodus`;
  }
  app.innerHTML=header()+`<main><div class="section-head"><div><div class="eyebrow">SPIEL LÄUFT · RUNDE ${room.round}/${room.rounds}</div><h1>${esc(game.name)} <span class="gradient-text">Battle</span></h1><div class="small">${esc(game.hint)}</div></div><span class="pill">⏱ <span id="timer">--:--</span></span></div>
@@ -474,14 +473,14 @@ function renderBriefing(){
  const game=GAME_INFO[room.mode];
  app.innerHTML=header()+`<main class="briefing-stage">
  <section class="briefing-card">
- <div class="briefing-sparkles">✦ ✧ ✨ ✦ ✧</div>
- <div class="eyebrow">RUNDE ${room.round} / ${room.rounds} · DAS NÄCHSTE MINIGAME</div>
+ 
+ <div class="eyebrow">RUNDE ${room.round} / ${room.rounds} · NÄCHSTES SPIEL</div>
  <div class="briefing-emoji">${room.mode==='snake'?'🐍':room.mode==='cellwars'?'🌟':room.mode==='connect4'?'🔴':room.mode==='wordle'?'🟩':room.mode==='mathquiz'?'🧮':'⭕'}</div>
  <h1>${esc(game.name)}</h1>
  <p class="briefing-description">${esc(gameDescriptions[room.mode]||game.hint)}</p>
  <div class="briefing-timer" id="briefing-timer"><span>Das Spiel beginnt gleich …</span></div>
  <div class="briefing-progress"><div id="briefing-progress"></div></div>
- <p class="small">Team L ⚔️ Team S · Viel Glück, Sternenwesen!</p>
+ <p class="small">Lara gegen Soul</p>
  </section></main>`;
  updateBriefing();
 }
@@ -493,7 +492,7 @@ function updateBriefing(){
  const left=Math.max(0,(room.briefingEnd-(Date.now()+serverOffset))/1000);
  const progress=document.getElementById('briefing-progress');
  if(progress)progress.style.width=`${Math.max(0,Math.min(100,(10-left)/10*100))}%`;
- el.innerHTML=`<span>Erklärung · noch ${Math.ceil(left)} Sekunden</span>`;
+ el.innerHTML=`<span>Start in ${Math.ceil(left)} s</span>`;
 }
 
 function renderPreview(){
@@ -506,7 +505,7 @@ function renderPreview(){
  }
  document.querySelectorAll('[data-action="move"]').forEach(b=>b.disabled=true);
  const stage=document.querySelector('.arena-area')||document.querySelector('.game-layout')||document.querySelector('main');
- if(stage){stage.style.position='relative';stage.insertAdjacentHTML('beforeend',`<div class="prestart-overlay" id="prestart-overlay"><div class="prestart-number" id="prestart-number">3</div><div class="prestart-label">Gleich geht's los!</div><div class="prestart-sub">Schau dich schon mal um. Noch nicht bewegen!</div></div>`);}
+ if(stage){stage.style.position='relative';stage.insertAdjacentHTML('beforeend',`<div class="prestart-overlay" id="prestart-overlay"><div class="prestart-number" id="prestart-number">3</div><div class="prestart-label">Gleich geht's los!</div><div class="prestart-sub">Bereit?</div></div>`);}
  updatePreview();
 }
 
@@ -537,7 +536,7 @@ function updateDuel(){
   button.disabled=!myTurn||!!value||(room.mode==='connect4'&&!!d.board[i%7]);
  });
  const info=document.querySelector('.turn-info');
- if(info)info.textContent=d.finished?(d.winner==='draw'?'🤝 Unentschieden':`🏆 Team ${d.winner} gewinnt dieses Duell!`):myTurn?'✨ Du bist am Zug!':own?'⏳ Dein Gegner ist am Zug.':`Team ${d.turn} ist am Zug · Zuschauermodus`;
+ if(info)info.textContent=d.finished?(d.winner==='draw'?'🤝 Unentschieden':`🏆 Team ${d.winner} gewinnt dieses Duell!`):myTurn?'Du bist dran.':own?'Gegner ist dran.':`Team ${d.turn} ist am Zug · Zuschauermodus`;
  const count=document.querySelector('.game-topline .pill');if(count)count.textContent=`${room.game.duels.filter(x=>x.finished).length} / ${room.game.duels.length} beendet`;
  document.querySelectorAll('.duel-item').forEach(button=>{const duel=room.game.duels.find(x=>x.id===Number(button.dataset.duel));if(!duel)return;const status=button.querySelector('.duel-status');if(status)status.textContent=duel.finished?(duel.winner==='draw'?'Unentschieden':'Team '+duel.winner+' gewinnt'):'Am Spielen';});
  updateTimer();
@@ -606,10 +605,10 @@ function wordleStatus(d){
 
  const own=ownWordleDuel();
 
- if(own?.id===d.id)return '⚡ Errate das Wort schneller als dein Gegner!';
- if(own?.finished)return '👀 Dein Duell ist vorbei. Du schaust einem anderen Duell zu.';
+ if(own?.id===d.id)return (own.guesses?.[me()?.team]?.length||0)>=6?'Keine Versuche mehr. Warte auf den Gegner.':'Finde das Wort vor deinem Gegner.';
+ if(own?.finished)return 'Dein Duell ist vorbei. Du schaust zu.';
 
- return '👀 Du schaust diesem Wortduell zu.';
+ return 'Du schaust zu.';
 }
 
 function renderWordle(){
@@ -617,7 +616,7 @@ function renderWordle(){
  if(d)chosenDuel=d.id;
 
  const own=ownWordleDuel();
- const canPlay=room.status==='playing'&&own&&!own.finished&&d?.id===own.id;
+ const canPlay=room.status==='playing'&&own&&!own.finished&&d?.id===own.id&&(own.guesses?.[me()?.team]?.length||0)<6;
  const all=room.game?.duels||[];
 
  app.innerHTML=header()+`
@@ -625,8 +624,8 @@ function renderWordle(){
   <div class="section-head">
    <div>
     <div class="eyebrow">WORTDUELL · RUNDE ${room.round}/${room.rounds}</div>
-    <h1>WORDLE <span class="gradient-text">BATTLE!</span></h1>
-    <div class="small">Dasselbe Wort für beide Spieler · Wer zuerst richtig liegt, gewinnt 100 Punkte.</div>
+    <h1>Wordle <span class="gradient-text">Battle</span></h1>
+    <div class="small">Ein Wort. Zwei Spieler. 100 Punkte für den Sieg.</div>
    </div>
    <span class="pill">⏱ <span id="timer">01:30</span></span>
   </div>
@@ -644,7 +643,7 @@ function renderWordle(){
      <div class="wordle-player team-L">
       <div class="wordle-player-head">
        ${d?avatarHTML(d.l,'wordle-avatar'):''}
-       <div><span>TEAM L</span><strong>${d?esc(playerName(d.l)):'–'}</strong></div>
+       <div><span>TEAM LARA</span><strong>${d?esc(playerName(d.l)):'–'}</strong></div>
        ${d?.winner==='L'?'<span class="wordle-crown">👑</span>':''}
       </div>
       <div class="wordle-grid" id="wordle-board-L">${wordleBoard(d?.guesses?.L)}</div>
@@ -655,7 +654,7 @@ function renderWordle(){
      <div class="wordle-player team-S">
       <div class="wordle-player-head">
        ${d?avatarHTML(d.s,'wordle-avatar'):''}
-       <div><span>TEAM S</span><strong>${d?esc(playerName(d.s)):'–'}</strong></div>
+       <div><span>TEAM SOUL</span><strong>${d?esc(playerName(d.s)):'–'}</strong></div>
        ${d?.winner==='S'?'<span class="wordle-crown">👑</span>':''}
       </div>
       <div class="wordle-grid" id="wordle-board-S">${wordleBoard(d?.guesses?.S)}</div>
@@ -666,15 +665,15 @@ function renderWordle(){
 
     <form id="wordle-form" class="wordle-form">
      <input id="wordle-answer" class="field" maxlength="5" minlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="DEIN WORT" aria-label="Wort mit fünf Buchstaben" ${canPlay?'':'disabled'} required>
-     <button class="btn btn-primary" type="submit" ${canPlay?'':'disabled'}>RATEN! ✨</button>
+     <button class="btn btn-primary" type="submit" ${canPlay?'':'disabled'}>Raten</button>
     </form>
 
-    <p class="wordle-hint">🟩 Richtiger Platz &nbsp; 🟨 Im Wort enthalten &nbsp; ⬜ Nicht enthalten</p>
-    <p class="small wordle-hint">Maximal 6 Versuche pro Spieler · 90 Sekunden pro Runde</p>
+    <p class="wordle-hint">Grün: richtig · Gelb: falscher Platz · Grau: nicht im Wort</p>
+    <p class="small wordle-hint">6 Versuche · 90 Sekunden</p>
    </section>
 
    <aside class="panel wordle-sidebar">
-    <div class="panel-title"><h3>👀 Alle Duelle</h3><span class="small">${all.length} Paarungen</span></div>
+    <div class="panel-title"><h3>Andere Duelle</h3><span class="small">${all.length} Paarungen</span></div>
     <div class="wordle-duel-list" id="wordle-duels">
      ${all.map(x=>`<button type="button" class="wordle-duel ${x.id===d?.id?'active':''}" data-action="viewwordle" data-duel="${x.id}">
       <strong>#${x.id} ${esc(playerName(x.l))} vs. ${esc(playerName(x.s))}</strong>
@@ -721,7 +720,7 @@ function updateWordle(){
  const status=document.getElementById('wordle-status');
  if(status)status.innerHTML=wordleStatus(d);
 
- const canPlay=room.status==='playing'&&own&&!own.finished&&own.id===d.id;
+ const canPlay=room.status==='playing'&&own&&!own.finished&&own.id===d.id&&(own.guesses?.[me()?.team]?.length||0)<6;
 
  const input=document.getElementById('wordle-answer');
  const button=document.querySelector('#wordle-form button');
@@ -750,12 +749,12 @@ function renderMath(){
  const duels=room.game?.duels||[],d=duels.find(x=>x.l===myId||x.s===myId)||duels[0];
  const own=d&&(d.l===myId||d.s===myId);
 
- app.innerHTML=header()+`<main class="math-stage"><div class="section-head"><div><div class="eyebrow">KOPF AN KOPF · RUNDE ${room.round}</div><h1>MATHQUIZ <span class="gradient-text">BATTLE!</span></h1></div><span class="pill">⏱ <span id="timer">--:--</span></span></div>${scoreBar()}
- <div class="math-card"><div class="math-sticker">✎ schnell, schnell!</div>
+ app.innerHTML=header()+`<main class="math-stage"><div class="section-head"><div><div class="eyebrow">KOPF AN KOPF · RUNDE ${room.round}</div><h1>Mathe<span class="gradient-text">quiz</span></h1></div><span class="pill">⏱ <span id="timer">--:--</span></span></div>${scoreBar()}
+ <div class="math-card"><div class="math-sticker">Kopfrechnen</div>
  <div class="math-versus">${d?`<div class="math-opponent ${d.l===myId?'math-own':'math-rival'}">${avatarHTML(d.l,'math-portrait')}<b>${esc(playerName(d.l))}</b><strong data-math-score="L">${d.scores.L}</strong></div><span class="math-vs-text">GEGEN</span><div class="math-opponent ${d.s===myId?'math-own':'math-rival'}">${avatarHTML(d.s,'math-portrait')}<b>${esc(playerName(d.s))}</b><strong data-math-score="S">${d.scores.S}</strong></div>`:'Kein Duell'}</div>
  <div class="math-question" data-question-id="${d?d.questionId:0}">${d?esc(d.question.text):'?'} <span>= ?</span></div>
- <form id="math-form" class="math-form"><input id="math-answer" type="number" autocomplete="off" placeholder="Dein Ergebnis" ${own&&room.status==='playing'?'':'disabled'} required><button class="btn btn-primary" ${own&&room.status==='playing'?'':'disabled'}>ANTWORTEN!</button></form>
- <p class="math-rules">✔ Richtig: <b>+10 Punkte</b> · ✕ Falsch: <b>−5 Punkte</b> · Aufgabe bleibt bis zur Lösung gleich.</p>
+ <form id="math-form" class="math-form"><input id="math-answer" type="number" autocomplete="off" placeholder="Dein Ergebnis" ${own&&room.status==='playing'?'':'disabled'} required><button class="btn btn-primary" ${own&&room.status==='playing'?'':'disabled'}>Antworten</button></form>
+ <p class="math-rules">Richtig +10 · Falsch −5</p>
  <p class="small">${own?'Du spielst dieses Duell.':'Du schaust diesem Duell zu.'}</p></div></main>`;
 
  document.getElementById('math-answer')?.focus();
@@ -766,9 +765,9 @@ function renderArenaGame(){
  const game=GAME_INFO[room.mode];
 
  app.innerHTML=header()+`<main><div class="section-head"><div><div class="eyebrow">LIVE · RUNDE ${room.round}/${room.rounds}</div><h1>${esc(game.name)} <span class="gradient-text">Arena</span></h1><div class="small">${esc(game.hint)}</div></div><span class="pill">⏱ <span id="timer">--:--</span></span></div>
- ${scoreBar()}<div class="game-layout"><section class="panel game-area arena-area"><div class="game-topline"><span class="small">${room.mode==='snake'?'✦ Lichtpunkte sammeln · andere Schlangen austricksen':'● Sammle Punkte · Friss kleinere Gegner'}</span><span class="pill">MAUS / WASD · LEERTASTE BOOST</span></div>
+ ${scoreBar()}<div class="game-layout"><section class="panel game-area arena-area"><div class="game-topline"><span class="small">${room.mode==='snake'?'✦ Lichtpunkte sammeln · andere Schlangen austricksen':'● Sammle Punkte · Friss kleinere Gegner'}</span><span class="pill">Maus / WASD · Leertaste: ${room.mode==='snake'?'Sprint':'Teilen'}</span></div>
  <canvas id="arena" class="arena-canvas" width="900" height="540" aria-label="${esc(game.name)} Spielarena"></canvas><div class="small" style="margin-top:15px;text-align:center">Dein Team ist ${me()?.team||'Zuschauer'} · ${room.mode==='snake'?'Kollisionen sind tödlich!':'Wirst du gefressen, scheidest du für diese Runde aus.'}</div></section>
- <aside class="panel game-side"><div class="panel-title"><h3>🏅 Rangliste</h3><span class="small">LIVE</span></div><div class="leaderboard" id="leaders"></div><div class="notice" style="margin-top:17px">${room.mode==='snake'?'Lichtpunkte sammeln, Gegner abschneiden und wachsen.':'2 Punkte pro Pellet, 35 Punkte pro gefressenem Gegner.'}</div><p class="small" style="margin-top:18px">Steuerung: Maus oder <span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span> oder Pfeiltasten. Leertaste: ${room.mode==='snake'?'Sprint':'Teilen / Sprint'}.</p></aside></div></main>`;
+ <aside class="panel game-side"><div class="panel-title"><h3>Rangliste</h3><span class="small">LIVE</span></div><div class="leaderboard" id="leaders"></div><div class="notice" style="margin-top:17px">${room.mode==='snake'?'Lichtpunkte sammeln, Gegner abschneiden und wachsen.':'2 Punkte pro Pellet, 35 Punkte pro gefressenem Gegner.'}</div><p class="small" style="margin-top:18px">Steuerung: Maus oder <span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span> oder Pfeiltasten. Leertaste: ${room.mode==='snake'?'Sprint':'Teilen / Sprint'}.</p></aside></div></main>`;
 
  drawArena();
  updateTimer();
@@ -888,13 +887,13 @@ function drawCartoonDeath(ctx,w,h){
  ctx.font=`900 ${Math.min(23,w*.04)}px "Trebuchet MS",sans-serif`;
  ctx.lineWidth=5;
  ctx.strokeStyle='#42105d';
- ctx.strokeText('Du bist ausgeschieden!',0,48);
+ ctx.strokeText('Ausgeschieden',0,48);
  ctx.fillStyle='#ffffff';
- ctx.fillText('Du bist ausgeschieden!',0,48);
+ ctx.fillText('Ausgeschieden',0,48);
 
  ctx.font='700 15px "Trebuchet MS",sans-serif';
  ctx.fillStyle='#f4c9ff';
- ctx.fillText('Gleich geht es bei deinem Team weiter ...',0,86);
+ ctx.fillText('Du schaust deinem Team zu.',0,86);
 
  ctx.restore();
 }
@@ -1130,7 +1129,7 @@ function updateFinalCountdown(){
 
  if(el.dataset.second!==String(remaining)){
   el.dataset.second=String(remaining);
-  el.innerHTML=`<span>LETZTE SEKUNDEN</span><strong>${remaining}</strong>`;
+  el.innerHTML=`<span>Endspurt</span><strong>${remaining}</strong>`;
   el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
  }
 }
@@ -1146,15 +1145,15 @@ function renderResults(){
  const done=room.status==='finished';
  const result=room.result;
  const winner=done?(room.scores.L===room.scores.S?'draw':room.scores.L>room.scores.S?'L':'S'):result.winner;
- const winnerText=winner==='draw'?'UNENTSCHIEDEN':`TEAM ${winner} GEWINNT!`;
+ const winnerText=winner==='draw'?'Unentschieden':`Team ${teamName(winner)} gewinnt`;
  const label=done?'MATCH BEENDET':'RUNDE BEENDET';
  const gains=done?room.scores:result.gains;
 
  app.innerHTML=header()+`<main>${scoreBar()}<div class="panel result-center"><div class="eyebrow">${label}</div><div class="winner-icon">${winner==='draw'?'🤝':'🏆'}</div><h1 class="result-title ${winner==='L'?'mark-L':winner==='S'?'mark-S':''}">${winnerText}</h1>
- <p class="result-sub">${done?'Das Match ist vorbei! Die Team-Gesamtpunkte entscheiden über den Sieg.':`Runde ${room.round} von ${room.rounds} abgeschlossen. ${esc(result.summary)}`}</p>
- <div class="result-points"><div class="result-score"><div class="mark-L">TEAM L</div><strong class="mark-L">${gains.L}</strong><div class="small">${done?'Gesamtpunkte':'Punkte in der Runde'}</div></div>
- <div class="result-score"><div class="mark-S">TEAM S</div><strong class="mark-S">${gains.S}</strong><div class="small">${done?'Gesamtpunkte':'Punkte in der Runde'}</div></div></div>
- ${done?(isHost()?'<button class="btn btn-primary" data-action="back">↻ Neue Spielserie</button>':'<div class="notice green">Spielserie beendet.</div>'):'<div class="notice green">⏳ Nächste Runde startet automatisch in <strong id="next-round-timer">10</strong> Sekunden.</div>'}
+ <p class="result-sub">${done?'Endstand.':`${esc(result.summary)}`}</p>
+ <div class="result-points"><div class="result-score"><div class="mark-L">LARA</div><strong class="mark-L">${gains.L}</strong><div class="small">${done?'Gesamtpunkte':'Punkte in der Runde'}</div></div>
+ <div class="result-score"><div class="mark-S">SOUL</div><strong class="mark-S">${gains.S}</strong><div class="small">${done?'Gesamtpunkte':'Punkte in der Runde'}</div></div></div>
+ ${done?(isHost()?'<button class="btn btn-primary" data-action="back">Neues Match</button>':'<div class="notice green">Match beendet.</div>'):'<div class="notice green">Weiter in <strong id="next-round-timer">10</strong> s</div>'}
  <div class="result-mascot-row" aria-hidden="true"><span>✦</span>${(room.players||[]).filter(p=>p.team).slice(0,8).map(p=>avatarHTML(p.id,'result-sticker')).join('')}<span>✧</span></div><div class="history">${room.history.map((h,i)=>`<span>Runde ${i+1} · ${esc(GAME_INFO[h.mode]?.name||h.mode)} · ${h.winner==='draw'?'Remis':'Team '+h.winner}</span>`).join('')}</div>
  </div></main>`;
 }
@@ -1213,8 +1212,8 @@ app.addEventListener('click',async e=>{
 
  if(action==='sound'||action==='music'){
   if(action==='sound')StarSound.toggleSound();else StarSound.toggleMusic();
-  document.querySelectorAll('[data-action="sound"]').forEach(el=>el.textContent=StarSound.enabled?'🔊 Ton AN':'🔇 Ton AUS');
-  document.querySelectorAll('[data-action="music"]').forEach(el=>el.textContent=StarSound.musicOn?'♫ Musik AN':'♫ Musik AUS');
+  document.querySelectorAll('[data-action="sound"]').forEach(el=>el.textContent=StarSound.enabled?'Ton an':'Ton aus');
+  document.querySelectorAll('[data-action="music"]').forEach(el=>el.textContent=StarSound.musicOn?'Musik an':'Musik aus');
   return;
  }
 
@@ -1294,7 +1293,7 @@ app.addEventListener('click',async e=>{
 
   try{
    await navigator.clipboard.writeText(value);
-   say('✓ In die Zwischenablage kopiert!');
+   say('Kopiert.');
   }catch{
    say('Kopieren nicht möglich. Code: '+room.code);
   }

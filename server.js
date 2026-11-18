@@ -61,7 +61,18 @@ const httpServer = http.createServer((req,res) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405).end(); return; }
   let url;
   try { url = new URL(req.url, 'http://localhost'); } catch { res.writeHead(400).end(); return; }
-  const allowed = { '/':'index.html', '/index.html':'index.html', '/style.css':'style.css', '/app.js':'app.js', '/audio.js':'audio.js', '/avatars.js':'avatars.js', '/favicon.svg':'favicon.svg' };
+  const allowed = {
+  '/':'index.html',
+  '/index.html':'index.html',
+  '/style.css':'style.css',
+  '/app.js':'app.js',
+  '/audio.js':'audio.js',
+  '/avatars.js':'avatars.js',
+  '/favicon.svg':'favicon.svg',
+  '/Mir_egal_Logo.png':'Mir_egal_Logo.png',
+  '/Team_L_Logo.png':'Team_L_Logo.png',
+  '/Team_S_Logo.png':'Team_S_Logo.png'
+};
   const file = allowed[url.pathname];
   if (!file) { res.writeHead(404).end('Nicht gefunden'); return; }
   fs.readFile(path.join(PUBLIC,file), (err, content) => {
@@ -161,6 +172,9 @@ function leave(peer) {
           duel.finished=true;duel.winner=duel.l===player.id?'S':'L';duel.endReason='Gegner hat die Lobby verlassen';
         }
       }
+      if(room.game.duels.every(d=>d.finished))finishGame(room);
+    }else if(room.mode==='wordle'){
+      for(const d of room.game.duels){if(!d.finished&&(d.l===player.id||d.s===player.id)){d.finished=true;d.winner=d.l===player.id?'S':'L';d.finishedAt=Date.now();}}
       if(room.game.duels.every(d=>d.finished))finishGame(room);
     }else if(room.mode==='snake'){
       const snake=room.game.snakes.find(s=>s.id===player.id);if(snake)snake.alive=false;
@@ -746,6 +760,9 @@ function finishGame(room){
  summary='Wordle Battle: 100 Punkte pro gewonnenem Duell';
 
   
+}else if(mode==='mathquiz'){
+ for(const d of g.duels){gains.L+=d.scores.L;gains.S+=d.scores.S;}
+ summary='Mathepunkte aller Teammitglieder';
 }else if(mode==='snake'){
  for(const s of g.snakes){
   if(s.team==='L'||s.team==='S')gains[s.team]+=Math.floor(s.score);

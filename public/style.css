@@ -760,3 +760,62 @@ body:not(:has(.home-new)) main,.math-opponent .sticker-avatar,.versus .sticker-a
 
 
 
+
+
+/* FINAL POLISH */
+body,body:has(.home-new){background:radial-gradient(circle at 12% 8%,#b85fc766,transparent 32%),radial-gradient(circle at 88% 90%,#744dc466,transparent 38%),linear-gradient(135deg,#6b2996,#9039ab 55%,#642b95);background-attachment:fixed}
+body:before{opacity:.08!important}.starfield{display:none!important}
+.topbar{background:#522678d9;border:1px solid #b483cb;border-radius:15px;box-shadow:0 10px 28px #270d4255;transform:none}.logo{background:linear-gradient(135deg,#ffe0a4,#ffacd0);color:#40205e;border:0;box-shadow:none;animation:none;transform:none}
+.title,.home-intro .title{color:#fff;text-shadow:none;transform:none;animation:none;font-size:clamp(40px,6vw,76px);line-height:1.05}
+.gradient-text,.home-intro .gradient-text{background:linear-gradient(110deg,#ffe2a1,#ff9fc9 50%,#c9b3ff)!important;background-clip:text!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;text-shadow:none!important;-webkit-text-stroke:0!important}
+.title-kicker{display:block;font-size:clamp(13px,1.7vw,20px);font-weight:900;letter-spacing:.35em;margin-top:10px;color:#f6d8ff}
+.home-intro .sub{font-size:15px;line-height:1.5}.home-new .home-box,.home-games,body:not(:has(.home-new)) .panel{background:linear-gradient(155deg,#8138a8,#622a90);border:1px solid #b788d0;border-radius:16px;box-shadow:0 13px 30px #2c0e4b55;transform:none}
+.home-new .home-box,.home-games{min-height:0}.home-new .eyebrow,.eyebrow{color:#fbd4e8;text-shadow:none;letter-spacing:1px}
+.home-games .preview-tile,.home-games .preview-tile:nth-child(n){background:#60308b;border:1px solid #bb94d3;border-radius:11px;box-shadow:none;transform:none!important;grid-column:auto;min-height:100px}.home-games .preview-tile:nth-child(2),.home-games .preview-tile:nth-child(5){background:#8d428c}.home-games .preview-tile:nth-child(3),.home-games .preview-tile:nth-child(6){background:#35668e}
+.home-games .preview-visual{font-size:22px;animation:none}.home-games .preview-tile:hover{transform:translateY(-3px)!important;box-shadow:0 8px 20px #290c4766}
+.btn,.join-team,.bot-add{border:1px solid #bc91d0!important;border-radius:10px!important;box-shadow:none!important;text-transform:none;font-weight:800}.btn:hover:not(:disabled),.join-team:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 7px 17px #300e4a66!important}
+.btn-primary,.home-new .btn-primary{background:linear-gradient(110deg,#ffe2ad,#ffc3d8);border-color:#ffe6c9!important;color:#48225f!important;box-shadow:none!important}.btn-secondary,.home-new .btn-secondary{background:linear-gradient(110deg,#78449a,#9b5bb1);color:#fff!important}
+.field,.home-new .field{background:#fff2fb;color:#382047;border:1px solid #d5b2df;border-radius:10px}.field:focus,.home-new .field:focus{border-color:#ffe1a4;box-shadow:0 0 0 3px #ffe0b344}
+.section-head{background:#642e8a99;border:1px solid #b485c7;border-radius:15px}.section-head h1,.panel-title h3{text-shadow:none}.section-head .small{color:#f4d7f6}
+.character-spotlight,.lobby-profile{transform:none;border-style:solid;background:#66358d}.team-header.L{background:linear-gradient(110deg,#2587a9,#2aabd0)}.team-header.S{background:linear-gradient(110deg,#b5337d,#e459a1)}
+.scoreboard{background:linear-gradient(110deg,#582b88,#843ca2,#8f3c8c);border:1px solid #bb85d0;border-radius:16px;box-shadow:0 9px 22px #2a0c4766}.score-value,.score-mid strong{text-shadow:none}
+.game-area{background:linear-gradient(145deg,#6d3795,#50287c)!important}.math-card{background:linear-gradient(145deg,#8242aa,#572b84)!important;border:1px solid #ba8ad1!important;border-radius:18px!important;box-shadow:0 12px 30px #2a0d4766!important;transform:none}.math-question{border:1px solid #d0a2e0;text-shadow:none}
+.briefing-card{background:linear-gradient(145deg,#8b47b2,#572b85)!important;border:1px solid #c494d8!important;border-radius:20px!important;box-shadow:0 12px 32px #290e4b66!important;transform:none}.briefing-card h1,.result-title{text-shadow:none}.briefing-sparkles,.prestart-sub{display:none}
+.wordle-status{background:#522b72;border:1px solid #c28dd4;color:#fff;font-size:14px}.wordle-hint{color:#f5dff7}.wordle-player{box-shadow:none}.wordle-tile{box-shadow:none}
+.result-score{box-shadow:none;border-width:1px}.winner-icon{display:none}.history span{font-weight:600}.notice{font-weight:500}.footer{color:#ead1f3}
+@media(max-width:1100px){.home-content{grid-template-columns:repeat(2,minmax(0,1fr))}.home-lobby{grid-column:1/-1}}
+@media(max-width:700px){.home-content{grid-template-columns:1fr}.home-lobby{grid-column:auto}.home-intro .title{font-size:clamp(38px,9vw,56px)}}
+@media(prefers-reduced-motion:reduce){.home-games .preview-tile,.btn{transition:none!important;animation:none!important}}
+
+.team-avatar{font-family:'Trebuchet MS',sans-serif;font-weight:900;font-style:normal;letter-spacing:-1px}
+.score-side .team-avatar{font-size:21px}
+
+.team-header .team-avatar,.score-side .team-avatar{font-family:'Arial Black','Trebuchet MS',sans-serif!important;font-weight:900!important;font-style:normal!important;letter-spacing:-1px}
+.team-header .team-avatar{font-size:23px}
+.score-side .team-avatar{font-size:24px}
+.team-avatar,.team-avatar.S{box-shadow:none!important;text-shadow:none!important}
+
+
+/* MIR EGAL LOGO */
+.topbar .logo{width:52px;height:52px;min-width:52px;background:url('/Mir_egal_Logo.png') center/contain no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important;text-shadow:none!important;font-size:0!important;animation:none!important;transform:none!important}
+
+/* TEAM LOGOS */
+.team-avatar{width:62px!important;height:70px!important;min-width:62px;background:url('/Team_L_Logo.png') center/contain no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important;text-shadow:none!important;font-size:0!important;line-height:0!important;transform:none!important}
+
+.team-avatar.S{background:url('/Team_S_Logo.png') center/contain no-repeat!important}
+
+/* LOBBY */
+.team-header{padding:12px 18px}
+.team-header .team-avatar{width:62px!important;height:70px!important;min-width:62px}
+.team-badge{gap:10px}
+
+/* PUNKTESTAND */
+.score-side .team-avatar{width:55px!important;height:62px!important;min-width:55px}
+
+/* MOBILE */
+@media(max-width:570px){
+.topbar .logo{width:42px;height:42px;min-width:42px}
+.team-header .team-avatar{width:46px!important;height:52px!important;min-width:46px}
+.score-side .team-avatar{width:38px!important;height:44px!important;min-width:38px}
+}
+
